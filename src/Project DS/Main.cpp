@@ -11,10 +11,8 @@
  CMPN 102
 
 Names :
- Yahia Ahmed Hatem Mostafa Mahmoud	1190445
- Ismael Tawfik Ismael Ahmed			1190264
- Mohamed Ahmed Abdullah Mahmoud		1190388
- Mohamed Wael Abdelfatah Mohamed	1190279
+ Yahia Ahmed Hatem Mostafa Mahmoud
+ Mohamed Ahmed Abdullah Mahmoud	
 */
 
 

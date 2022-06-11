@@ -8,7 +8,9 @@ public:
     virtual bool isEmpty() const = 0;
 
     virtual bool enqueue(const ItemType& newEntry) = 0;
+    
     virtual bool enqueueAsc(const ItemType& newEntry, int priority) = 0;
+    
     virtual bool enqueueDesc(const ItemType& newEntry, int priority) = 0;
 
     virtual bool dequeue(ItemType& FrontEntry) = 0;

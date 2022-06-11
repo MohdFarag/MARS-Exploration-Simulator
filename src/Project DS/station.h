@@ -28,6 +28,7 @@ class station
 private:
 	// the num of the Day since the station start to Exceute Missions and Rovers 
 	int Day;
+	int RoverNumPolar;
 
 	// All queues that we need.
 	LinkedQueue<Mission*> WaitMissionsP;
@@ -38,7 +39,10 @@ private:
 	LinkedPriQueue<Rover*> AvailRovP;
 	LinkedPriQueue<Rover*> AvailRovE;
 
-	LinkedQueue<Rover*> InCheckRov;
+	LinkedQueue<Rover*> InCheckRovP;
+	LinkedQueue<Rover*> InCheckRovE;
+
+
 	LinkedQueue<Mission*> CompletedMissions;
 
 	LinkedPriQueue<Rover*> InExRov;

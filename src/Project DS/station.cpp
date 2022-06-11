@@ -34,6 +34,8 @@ void station::Load() {
 		Rover* R = new Rover(Polar, checkupDurP, speedRovP[i], numCheckup);
 		AvailRovP.enqueueDesc(R, R->getspeed());
 	}
+	
+	RoverNumPolar = numRovP;
 }
 
 // Save output file and Show information on Screen
@@ -55,9 +57,16 @@ void station::Execute() {
 		Events.dequeue(F);
 	}
 
+	if (RoverNumPolar == 0)
+	{
+		while (WaitMissionsP.dequeue(M));
+	}
+
 	if (!AvailRovE.isEmpty() || !AvailRovP.isEmpty())
 	{
 		while (WaitMissionsE.peek(M) && (!AvailRovP.isEmpty() || !AvailRovE.isEmpty()) )
+
+
 		{
 			if (!AvailRovE.isEmpty())
 			{
@@ -112,7 +121,15 @@ void station::Execute() {
 
 			R->setMissionsDone(0);
 			R->setReleaseDay(Day);
-			InCheckRov.enqueue(R);
+
+			if (R->getRovertype() == Emergency)
+			{
+				InCheckRovE.enqueue(R);
+			}
+			else
+			{
+				InCheckRovP.enqueue(R);
+			}
 
 			if (M->getType() == Emergency) 
 				WaitMissionsE.enqueueDesc(M,M->getSign());
@@ -130,32 +147,42 @@ void station::Execute() {
 			{
 				R->setMissionsDone(0);
 				R->setReleaseDay(Day);
-				InCheckRov.enqueue(R);
+
+				if (R->getRovertype() == Emergency)
+				{
+					InCheckRovE.enqueue(R);
+				}
+				else
+				{
+					InCheckRovP.enqueue(R);
+				}
+
 			}
 			else
 			{
 				if (R->getRovertype() == Emergency)
 				{
-					AvailRovE.enqueue(R);
+					AvailRovE.enqueueDesc(R, R->getspeed());
 				}
 				else {
-					AvailRovP.enqueue(R);
+					AvailRovP.enqueueDesc(R, R->getspeed());
 				}
 			}
 		}
 	}
 
-	while (InCheckRov.peek(R) && R->getReleaseDay() == Day)
+	while (InCheckRovE.peek(R) && R->getReleaseDay() == Day)
 	{
-		InCheckRov.dequeue(R);
-		if (R->getRovertype() == Emergency)
-		{
-			AvailRovE.enqueue(R);
-		}
-		else {
-			AvailRovP.enqueue(R);
-		}
+		InCheckRovE.dequeue(R);
+		AvailRovE.enqueueDesc(R,R->getspeed());
 	}
+
+	while (InCheckRovP.peek(R) && R->getReleaseDay() == Day)
+	{
+		InCheckRovP.dequeue(R);
+		AvailRovP.enqueueDesc(R, R->getspeed());
+	}
+
 	Day++;
 }
 
@@ -167,37 +194,51 @@ void station::Control() {
 
 	switch (mode) {
 	case 1:
-
-
 		do
 		{
 			Execute();
-			if (Day - 1 != 0)
-			{
-				UI.OutputScreen(Day - 1, WaitMissionsP, WaitMissionsE, InExMissions, AvailRovP, AvailRovE, InCheckRov, CompletedMissions);
-				system("pause");
+
+
+			if ( Day == 1 && AvailRovE.isEmpty() && AvailRovP.isEmpty()) {
+				break;
 			}
 
-		} while (!WaitMissionsP.isEmpty() || !WaitMissionsE.isEmpty() || !InExMissions.isEmpty() || !InCheckRov.isEmpty() || !Events.isEmpty());
+			if (Day - 1 != 0)
+			{
+				UI.OutputScreen(Day - 1, WaitMissionsP, WaitMissionsE, InExMissions, AvailRovP, AvailRovE, InCheckRovP, InCheckRovE, CompletedMissions);
+				system("pause");
+
+			}
+		} while (!WaitMissionsP.isEmpty() || !WaitMissionsE.isEmpty() || !InExMissions.isEmpty() || !InCheckRovE.isEmpty() || !InCheckRovP.isEmpty() || !Events.isEmpty());
 		break;
 
 	case 2:
 		do
 		{
 			Execute();
+
+			if (Day == 1 && AvailRovE.isEmpty() && AvailRovP.isEmpty()) {
+				break;
+			}
+
 			if (Day - 1 != 0)
 			{
-				UI.OutputScreen(Day - 1, WaitMissionsP, WaitMissionsE, InExMissions, AvailRovP, AvailRovE, InCheckRov, CompletedMissions);
+				UI.OutputScreen(Day - 1, WaitMissionsP, WaitMissionsE, InExMissions, AvailRovP, AvailRovE,InCheckRovP, InCheckRovE, CompletedMissions);
 				Sleep(1000);
 			}
-		} while (!WaitMissionsP.isEmpty() || !WaitMissionsE.isEmpty() || !InExMissions.isEmpty() || !InCheckRov.isEmpty() || !Events.isEmpty());
+		} while (!WaitMissionsP.isEmpty() || !WaitMissionsE.isEmpty() || !InExMissions.isEmpty() || !InCheckRovE.isEmpty() || !InCheckRovP.isEmpty() || !Events.isEmpty());
 
 		break;
 	case 3:
 		do
 		{
 			Execute();
-		} while (!WaitMissionsP.isEmpty() || !WaitMissionsE.isEmpty() || !InExMissions.isEmpty() || !Events.isEmpty());
+
+			if (Day == 1 && AvailRovE.isEmpty() && AvailRovP.isEmpty()) {
+				break;
+			}
+
+		} while (!WaitMissionsP.isEmpty() || !WaitMissionsE.isEmpty() || !InExMissions.isEmpty() || !InCheckRovE.isEmpty() || !InCheckRovP.isEmpty() || !Events.isEmpty());
 
 	default:
 		break;

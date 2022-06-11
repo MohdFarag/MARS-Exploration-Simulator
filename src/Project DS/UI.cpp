@@ -126,8 +126,15 @@ void UIclass::OutputFile(LinkedQueue<Mission*> CompletedMissions, int RovP, int 
 		Compsize++;
 	}
 
-	AvgExec = AvgExec / Compsize;
-	AvgWait = AvgWait / Compsize;
+	if (Compsize > 0)
+	{
+		AvgExec = AvgExec / Compsize;
+		AvgWait = AvgWait / Compsize;
+	}
+	
+
+	
+
 
 	outputFile << "..................................." << endl << "..................................." << endl;
 
@@ -136,7 +143,7 @@ void UIclass::OutputFile(LinkedQueue<Mission*> CompletedMissions, int RovP, int 
 	outputFile << "Avg Wait = " << AvgWait << ", Avg Exec = " << AvgExec << endl;
 }
  
- void UIclass::OutputScreen(int Day, LinkedQueue<Mission*> WaitMissionsP, LinkedPriQueue<Mission*> WaitMissionsE, LinkedPriQueue<Mission*> InExMissions, LinkedPriQueue<Rover*> AvailRovP, LinkedPriQueue<Rover*> AvailRovE, LinkedQueue<Rover*> InCheckRov, LinkedQueue<Mission*> CompletedMissions) {
+ void UIclass::OutputScreen(int Day, LinkedQueue<Mission*> WaitMissionsP, LinkedPriQueue<Mission*> WaitMissionsE, LinkedPriQueue<Mission*> InExMissions, LinkedPriQueue<Rover*> AvailRovP, LinkedPriQueue<Rover*> AvailRovE, LinkedQueue<Rover*> InCheckRovP, LinkedQueue<Rover*> InCheckRovE, LinkedQueue<Mission*> CompletedMissions) {
 
 	Mission* M;
 	Rover* R;
@@ -274,18 +281,10 @@ void UIclass::OutputFile(LinkedQueue<Mission*> CompletedMissions, int RovP, int 
 	
 	cout << "------------------------------------------------------" << endl;
 	
-	int sizeCheckRov = InCheckRov.size();
-	LinkedQueue<Rover*> InCheckRovE;
-	LinkedQueue<Rover*> InCheckRovP;
-	while (InCheckRov.dequeue(R))
-	{
-		if (R->getRovertype() == Emergency) InCheckRovE.enqueue(R);
-		else if (R->getRovertype() == Polar) InCheckRovP.enqueue(R);
-	}
 	int InCheckRovEsize = InCheckRovE.size();
 	int InCheckRovPsize = InCheckRovP.size();
 
-	cout << sizeCheckRov << " In-Checkup Rovers: ";
+	cout << InCheckRovEsize + InCheckRovPsize << " In-Checkup Rovers: ";
 
 	cout << "[";
 	for (int i = 0; i < InCheckRovEsize; i++)
@@ -323,41 +322,52 @@ void UIclass::OutputFile(LinkedQueue<Mission*> CompletedMissions, int RovP, int 
 	
 	cout << "------------------------------------------------------" << endl;
 
+
 	int sizeComp = CompletedMissions.size();
-	cout << sizeComp <<" Completed Missions: ";
-	
-	cout << "[";
-	for (int i = 0; i < sizeComp; i++)
+	LinkedPriQueue<Mission*> CompE;
+	LinkedPriQueue<Mission*> CompP;
+	while (CompletedMissions.dequeue(M))
 	{
-		CompletedMissions.dequeue(M);
-		if (M->getType() == Emergency)
-		{
-			if (i > 0 && i !=sizeComp)
+		if (M->getType() == Emergency) CompE.enqueueAsc(M, M->getCD());
+		else if (M->getType() == Polar) CompP.enqueueAsc(M, M->getCD());
+	}
+	int CompEsize = CompE.size();
+	int CompPsize = CompP.size();
+
+	cout << sizeComp << " Completed Missions: ";
+
+	cout << "[";
+	for (int i = 0; i < CompEsize; i++)
+	{
+		if (CompE.dequeue(M)) {
+			if (i > 0 && i != CompEsize)
 			{
 				cout << ", ";
 			}
-			cout << M->getID();
-		}
-		else
-		{
-			CompletedMissions.enqueue(M);
+			if (M->getType() == Emergency)
+			{
+				cout << M->getID();
+			}
 		}
 	}
 	cout << "] ";
 
 	cout << "(";
-	i = 0;
-	while (CompletedMissions.dequeue(M))
+	for (int i = 0; i < CompPsize; i++)
 	{
-		if (i > 0)
-		{
-			cout << ", ";
+		if (CompP.dequeue(M)) {
+			if (i > 0 && i != CompPsize)
+			{
+				cout << ", ";
+			}
+			if (M->getType() == Polar)
+			{
+				cout << M->getID();
+			}
 		}
-		cout << M->getID();
-		i++;
 	}
 	cout << ")";
 
-	cout << endl;
-	
+
+	cout << endl;	
 }

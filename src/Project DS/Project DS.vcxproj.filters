@@ -35,13 +35,7 @@
     <ClCompile Include="event.cpp">
       <Filter>events</Filter>
     </ClCompile>
-    <ClCompile Include="Cancellation.cpp">
-      <Filter>events</Filter>
-    </ClCompile>
     <ClCompile Include="Formulation.cpp">
-      <Filter>events</Filter>
-    </ClCompile>
-    <ClCompile Include="Promotion.cpp">
       <Filter>events</Filter>
     </ClCompile>
     <ClCompile Include="UI.cpp">
@@ -70,13 +64,7 @@
     <ClInclude Include="event.h">
       <Filter>events</Filter>
     </ClInclude>
-    <ClInclude Include="Cancellation.h">
-      <Filter>events</Filter>
-    </ClInclude>
     <ClInclude Include="Formulation.h">
-      <Filter>events</Filter>
-    </ClInclude>
-    <ClInclude Include="Promotion.h">
       <Filter>events</Filter>
     </ClInclude>
     <ClInclude Include="PriQueueADT.h">

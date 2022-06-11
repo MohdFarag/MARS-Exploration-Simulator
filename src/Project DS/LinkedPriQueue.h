@@ -22,16 +22,11 @@ public:
 	int size();
 	~LinkedPriQueue();
 
-	//copy constructor
 	LinkedPriQueue(const LinkedPriQueue<T>& LQ);
 };
 /////////////////////////////////////////////////////////////////////////////////////////
 
-/*
-Function: Queue()
-The constructor of the Queue class.
-
-*/
+/* Queue() */
 
 template <typename T>
 LinkedPriQueue<T>::LinkedPriQueue()
@@ -43,13 +38,7 @@ LinkedPriQueue<T>::LinkedPriQueue()
 }
 /////////////////////////////////////////////////////////////////////////////////////////
 
-/*
-Function: isEmpty
-Sees whether this queue is empty.
-
-Input: None.
-Output: True if the queue is empty; otherwise false.
-*/
+/* is Empty */
 template <typename T>
 bool LinkedPriQueue<T>::isEmpty() const
 {
@@ -58,12 +47,7 @@ bool LinkedPriQueue<T>::isEmpty() const
 
 /////////////////////////////////////////////////////////////////////////////////////////
 
-/*Function:enqueue
-Adds newEntry at the back of this queue Asc.
-
-Input: newEntry .
-Output: True if the operation is successful; otherwise false.
-*/
+/* enqueue by Asc */
 
 template <typename T>
 bool LinkedPriQueue<T>::enqueueAsc(const T& newEntry, int priority)
@@ -87,14 +71,9 @@ bool LinkedPriQueue<T>::enqueueAsc(const T& newEntry, int priority)
 	}
 	Count++;
 	return true;
-} // end enqueue
+} 
 
-/*Function:enqueue
-Adds newEntry at the back of this queue Asc.
-
-Input: newEntry .
-Output: True if the operation is successful; otherwise false.
-*/
+/* enqueue by Desc*/
 
 template <typename T>
 bool LinkedPriQueue<T>::enqueueDesc(const T& newEntry, int priority)
@@ -118,16 +97,11 @@ bool LinkedPriQueue<T>::enqueueDesc(const T& newEntry, int priority)
 	}
 	Count++;
 	return true;
-} // end enqueue
+} 
 
 /////////////////////////////////////////////////////////////////////////////////////////
 
-/*Function:enqueue
-Adds newEntry at the back of this queue.
-
-Input: newEntry .
-Output: True if the operation is successful; otherwise false.
-*/
+/* enqueue : Adds newEntry at the back of this queue. */
 
 template <typename T>
 bool LinkedPriQueue<T>::enqueue(const T& newEntry)
@@ -143,19 +117,12 @@ bool LinkedPriQueue<T>::enqueue(const T& newEntry)
 
 	Count++;
 	return true;
-} // end enqueue
+} 
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-/*Function: dequeue
-Removes the front of this queue. That is, removes the item that was added
-earliest.
-
-Input: None.
-Output: True if the operation is successful; otherwise false.
-*/
-
+/* dequeue */
 template <typename T>
 bool LinkedPriQueue<T>::dequeue(T& frntEntry)
 {
@@ -166,10 +133,9 @@ bool LinkedPriQueue<T>::dequeue(T& frntEntry)
 	frntEntry = frontPtr->getItem();
 	frontPtr = frontPtr->getNext();
 	// Queue is not empty; remove front
-	if (NodePriToDeletePtr == backPtr)	 // Special case: last NodePri in the queue
+	if (NodePriToDeletePtr == backPtr)	
 		backPtr = nullptr;
 
-	// Free memory reserved for the dequeued NodePri
 	delete NodePriToDeletePtr;
 
 	Count--;
@@ -177,13 +143,7 @@ bool LinkedPriQueue<T>::dequeue(T& frntEntry)
 
 }
 /////////////////////////////////////////////////////////////////////////////////////////
-/*
-Function: peek
-copies the front of this queue to the passed param. The operation does not modify the queue.
-
-Input: None.
-Output: The front of the queue.
-*/
+/* peek */
 template <typename T>
 bool LinkedPriQueue<T>::peek(T& frntEntry) const
 {
@@ -220,10 +180,7 @@ int LinkedPriQueue<T>::size()
 	return c;
 }
 ///////////////////////////////////////////////////////////////////////////////////
-/*
-Function: destructor
-removes all NodePris from the queue by dequeuing them
-*/
+
 template <typename T>
 LinkedPriQueue<T>::~LinkedPriQueue()
 {
@@ -233,14 +190,6 @@ LinkedPriQueue<T>::~LinkedPriQueue()
 	while (dequeue(temp));
 }
 /////////////////////////////////////////////////////////////////////////////////////////
-/*
-Function: Copy constructor
-To avoid shallow copy,
-copy constructor is provided
-
-Input: LinkedPriQueue<T>: The Queue to be copied
-Output: none
-*/
 
 template <typename T>
 LinkedPriQueue<T>::LinkedPriQueue(const LinkedPriQueue<T>& LQ)

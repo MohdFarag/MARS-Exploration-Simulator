@@ -1,12 +1,12 @@
-
 #ifndef _NODE
 #define _NODE
+
 template < typename T>
 class Node
 {
 private :
-	T item; // A data item
-	Node<T>* next; // Pointer to next node
+	T item; 
+	Node<T>* next; 
 public :
 	Node();
 	Node( const T & r_Item);	
@@ -15,7 +15,7 @@ public :
 	void setNext(Node<T>* nextNodePtr);
 	T getItem() const ;
 	Node<T>* getNext() const ;
-}; // end Node
+};
 #endif
 
 template < typename T>

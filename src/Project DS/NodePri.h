@@ -6,8 +6,8 @@ template < typename T>
 class NodePri
 {
 private:
-	T item; // A data item
-	NodePri<T>* next; // Pointer to next NodePri
+	T item;
+	NodePri<T>* next;
 	int Priority;
 public:
 	NodePri();
@@ -19,7 +19,7 @@ public:
 	T getItem() const;
 	NodePri<T>* getNext() const;
 	int getPriority();
-}; // end NodePri
+}; 
 #endif
 
 template < typename T>
